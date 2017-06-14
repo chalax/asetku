@@ -1,85 +1,84 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
-
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
-
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-  });
-})
+angular.module('ionicApp', ['ionic','ionicApp.controllers','firebase'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
+  var config = {
+    apiKey: "AIzaSyA7fi06i9Yga8aR5VmqVQqeCgo-gX98pdw",
+    authDomain: "asetku-5e77d.firebaseapp.com",
+    databaseURL: "https://asetku-5e77d.firebaseio.com",
+    projectId: "asetku-5e77d",
+    storageBucket: "asetku-5e77d.appspot.com",
+    messagingSenderId: "1048403566031"
+  };
+  firebase.initializeApp(config);
+  var defaultAuth = firebase.auth();
+
   $stateProvider
-
-  // setup an abstract state for the tabs directive
-    .state('tab', {
-    url: '/tab',
-    abstract: true,
-    templateUrl: 'templates/tabs.html'
-  })
-
-  // Each tab has its own nav history stack:
-
-  .state('tab.dash', {
-    url: '/dash',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
-      }
-    }
-  })
-
-  .state('tab.chats', {
-      url: '/chats',
+    .state('signin', {
+      url: '/sign-in',
+      templateUrl: 'templates/sign-in.html',
+      controller: 'SignInCtrl'
+    })
+    .state('forgotpassword', {
+      url: '/forgot-password',
+      templateUrl: 'templates/forgot-password.html'
+    })
+    .state('tabs', {
+      url: '/tab',
+      abstract: true,
+      templateUrl: 'templates/tabs.html'
+    })
+    .state('tabs.home', {
+      url: '/home',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'home-tab': {
+          templateUrl: 'templates/tabscontent/home.html',
+          controller: 'HomeTabCtrl'
         }
       }
     })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
+    .state('tabs.facts', {
+      url: '/facts',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
+        'home-tab': {
+          templateUrl: 'templates/facts.html'
         }
       }
     })
-
-  .state('tab.account', {
-    url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+    .state('tabs.facts2', {
+      url: '/facts2',
+      views: {
+        'home-tab': {
+          templateUrl: 'templates/facts2.html'
+        }
       }
-    }
-  });
+    })
+    .state('tabs.about', {
+      url: '/about',
+      views: {
+        'about-tab': {
+          templateUrl: 'templates/about.html'
+        }
+      }
+    })
+    .state('tabs.navstack', {
+      url: '/navstack',
+      views: {
+        'about-tab': {
+          templateUrl: 'templates/nav-stack.html'
+        }
+      }
+    })
+    .state('tabs.contact', {
+      url: '/contact',
+      views: {
+        'contact-tab': {
+          templateUrl: 'templates/contact.html'
+        }
+      }
+    });
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+
+    $urlRouterProvider.otherwise('/sign-in');
 
 });
