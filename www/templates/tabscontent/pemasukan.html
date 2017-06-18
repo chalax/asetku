@@ -1,0 +1,94 @@
+<ion-view view-title="Pemasukan">
+        <ion-content padding="true">
+          <h3>Kas Sekarang {{kasSekarang | currency : "Rp."}}</h3>
+          <button class="button button-balanced button-block" ng-click="isNew=!isNew">Tambah</button>
+
+
+
+
+
+
+          <div class="list card padding" ng-show="isNew">
+            <label class="item item-input">
+              <span class="input-label">Asal Pemasukan</span>
+              <input type="text" ng-model="pengeluaran.judulpengeluaran">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Jumlah</span>
+              <input type="number" ng-model="pengeluaran.jumlah" value="0">
+            </label>
+            <div class="button-group">
+                <button class="button button-calm" ng-click="isNew = !isNew">Selesai</button>
+                <button class="item button button-positive" ng-click="newPengeluaran()">
+                  Simpan
+                </button>
+            </div>
+          </div>
+
+            <div class="card" ng-click="detailHarian()">
+              <div class="item item-divider">
+                Hari Ini
+              </div>
+              <div class="item item-text-wrap">
+                <span ng-if="!pengeluaranharianObj.$resolved">Loading...</span>
+                <span ng-if="pengeluaranharianObj.$resolved">{{totalPengeluaranHariIni | currency : "Rp."}}</span>
+              </div>
+            </div>
+            <div class="card" ng-if="showDetailHarian">
+
+              <div class="item item-divider">
+                Pemasukan Hari Ini
+              </div>
+              <div class="item item-text-wrap" ng-repeat="hari in listpengeluaranhariini track by $index">
+                {{hari.judulpengeluaran}}
+                <span class="item-note">
+                  Rp.{{hari.jumlah}}
+                </span>
+              </div>
+            </div>
+
+            <div class="card" ng-click="showDetailBulanan = !showDetailBulanan">
+              <div class="item item-divider">
+                Bulan Ini
+              </div>
+              <div class="item item-text-wrap">
+                <span ng-if="!pengeluaranbulananObj.$resolved">Loading...</span>
+                <span ng-if="pengeluaranbulananObj.$resolved">{{totalPengeluaranBulanIni | currency : "Rp."}}</span>
+              </div>
+            </div>
+            <div class="card" ng-if="showDetailBulanan">
+
+              <div class="item item-divider">
+                Pemasukan Bulan Ini
+              </div>
+              <div class="item item-text-wrap" ng-repeat="hari in listpengeluaranbulanini track by $index">
+                {{hari.judulpengeluaran}}
+                <span class="item-note">
+                  Rp.{{hari.jumlah}}
+                </span>
+              </div>
+            </div>
+
+            <div class="card" ng-click="showDetailTahunan = !showDetailTahunan">
+              <div class="item item-divider">
+                Tahun Ini
+              </div>
+              <div class="item item-text-wrap">
+                <span ng-if="!pengeluarantahunanObj.$resolved">Loading...</span>
+                <span ng-if="pengeluarantahunanObj.$resolved">{{totalPengeluaranTahunIni | currency : "Rp."}}</span>
+              </div>
+            </div>
+            <div class="card" ng-if="showDetailTahunan">
+              <div class="item item-divider">
+                Pemasukan Tahun Ini
+              </div>
+              <div class="item item-text-wrap" ng-repeat="hari in listpengeluarantahunini track by $index">
+                {{hari.judulpengeluaran}}
+                <span class="item-note">
+                  Rp.{{hari.jumlah}}
+                </span>
+              </div>
+            </div>
+
+        </ion-content>
+      </ion-view>

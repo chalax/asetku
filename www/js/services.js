@@ -1,5 +1,7 @@
-angular.module('starter.services', [])
-
+angular.module('ionicApp.services', [])
+.factory("Auth",function($firebaseAuth){
+  return $firebaseAuth();
+})
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
 

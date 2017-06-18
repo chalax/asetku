@@ -1,0 +1,32 @@
+<ion-view view-title="Pengaturan">
+        <ion-content padding="true">
+
+          <h3>Kas Sekarang {{kasSekarang | currency : "Rp."}}</h3>
+
+
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Set Kas</span>
+              <input type="text" ng-model="kas.kassekarang">
+            </label>
+
+          </div>
+          <div>
+            <button class="button button-block button-balanced" ng-click="setKas(kas)">
+              Simpan
+            </button>
+
+            <button class="button button-block button-energized" ng-click="signOut()">Logout</button>
+          </div>
+
+
+          <div class="card padding">
+            <center>
+                Developed By Chalax@NashStudio<br>
+                Aplikasi simpel untuk melihat catatan pengeluaran dan pemasukan pribadi.<br>
+                Kritik dan saran yang membangun dapat anda kirimkan ke chalax77@gmail.com
+            </center>
+          </div>
+
+        </ion-content>
+      </ion-view>

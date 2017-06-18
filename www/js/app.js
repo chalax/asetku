@@ -1,6 +1,6 @@
-angular.module('ionicApp', ['ionic','ionicApp.controllers','firebase'])
+angular.module('ionicApp', ['ionic','ionicApp.controllers','firebase','ionicApp.services'])
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
 
   var config = {
     apiKey: "AIzaSyA7fi06i9Yga8aR5VmqVQqeCgo-gX98pdw",
@@ -12,7 +12,7 @@ angular.module('ionicApp', ['ionic','ionicApp.controllers','firebase'])
   };
   firebase.initializeApp(config);
   var defaultAuth = firebase.auth();
-
+  $ionicConfigProvider.views.maxCache(0);
   $stateProvider
     .state('signin', {
       url: '/sign-in',
@@ -33,52 +33,67 @@ angular.module('ionicApp', ['ionic','ionicApp.controllers','firebase'])
       views: {
         'home-tab': {
           templateUrl: 'templates/tabscontent/home.html',
-          controller: 'HomeTabCtrl'
+          controller: 'HomeTabCtrl',
+          resolve: {
+            // controller will not be loaded until $requireSignIn resolves
+            // Auth refers to our $firebaseAuth wrapper in the factory below
+            "currentAuth": ["Auth", function(Auth) {
+              // $requireSignIn returns a promise so the resolve waits for it to complete
+              // If the promise is rejected, it will throw a $stateChangeError (see above)
+              return Auth.$requireSignIn();
+            }]
+          }
         }
       }
     })
-    .state('tabs.facts', {
-      url: '/facts',
+    .state('tabs.pemasukan', {
+      url: '/pemasukan',
       views: {
-        'home-tab': {
-          templateUrl: 'templates/facts.html'
+        'pemasukan-tab': {
+          templateUrl: 'templates/tabscontent/pemasukan.html',
+          controller:"pemasukanCtrl",
+          resolve: {
+            // controller will not be loaded until $requireSignIn resolves
+            // Auth refers to our $firebaseAuth wrapper in the factory below
+            "currentAuth": ["Auth", function(Auth) {
+              // $requireSignIn returns a promise so the resolve waits for it to complete
+              // If the promise is rejected, it will throw a $stateChangeError (see above)
+              return Auth.$requireSignIn();
+            }]
+          }
         }
       }
     })
-    .state('tabs.facts2', {
-      url: '/facts2',
+    .state('tabs.setting', {
+      url: '/setting',
       views: {
-        'home-tab': {
-          templateUrl: 'templates/facts2.html'
+        'setting-tab': {
+          templateUrl: 'templates/tabscontent/setting.html',
+          controller:"settingCtrl",
+          resolve: {
+            // controller will not be loaded until $requireSignIn resolves
+            // Auth refers to our $firebaseAuth wrapper in the factory below
+            "currentAuth": ["Auth", function(Auth) {
+              // $requireSignIn returns a promise so the resolve waits for it to complete
+              // If the promise is rejected, it will throw a $stateChangeError (see above)
+              return Auth.$requireSignIn();
+            }]
+          }
         }
       }
     })
-    .state('tabs.about', {
-      url: '/about',
-      views: {
-        'about-tab': {
-          templateUrl: 'templates/about.html'
-        }
-      }
-    })
-    .state('tabs.navstack', {
-      url: '/navstack',
-      views: {
-        'about-tab': {
-          templateUrl: 'templates/nav-stack.html'
-        }
-      }
-    })
-    .state('tabs.contact', {
-      url: '/contact',
-      views: {
-        'contact-tab': {
-          templateUrl: 'templates/contact.html'
-        }
-      }
-    });
 
 
-    $urlRouterProvider.otherwise('/sign-in');
 
-});
+    $urlRouterProvider.otherwise('/tab/home');
+
+})
+.run(["$rootScope", "$state", function($rootScope, $state) {
+  $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
+    // We can catch the error thrown when the $requireSignIn promise is rejected
+    // and redirect the user back to the home page
+    if (error === "AUTH_REQUIRED") {
+      $state.go("signin");
+    }
+  });
+}]);
